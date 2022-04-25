@@ -6,26 +6,26 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class Demineur extends JFrame implements ActionListener, MouseListener {
-    int rows = 10;
-    int columns = 10;
-    int numMines = 10;
-    GridLayout layout = new GridLayout(rows, columns);
-    boolean[] mines = new boolean[rows * columns];
-    boolean[] clickable = new boolean[rows * columns];
+    int lignes = 10;
+    int colonnes = 10;
+    int nombresMines = 10;
+    GridLayout layout = new GridLayout(lignes, colonnes);
+    boolean[] mines = new boolean[lignes * colonnes];
+    boolean[] clickable = new boolean[lignes * colonnes];
     boolean lost = false;
     boolean win = false;
-    int[] numbers = new int[rows * columns];
-    JButton[] buttons = new JButton[rows * columns];
-    boolean[] clickdone = new boolean[rows * columns];
+    int[] nombres = new int[lignes * colonnes];
+    JButton[] buttons = new JButton[lignes * colonnes];
+    boolean[] clickdone = new boolean[lignes * colonnes];
     JMenuItem newGameButton = new JMenuItem("Nouvelle partie");
     JMenuItem difficulty = new JMenuItem("Options");
-    JLabel mineLabel = new JLabel("Mines: " + numMines + " marqué(s): 0");
+    JLabel mineLabel = new JLabel("Mines: " + nombresMines + " marqué(s): 0");
     JPanel jPanel = new JPanel();
 
     public Demineur() {
         jPanel.setLayout(layout);
         initialisation();
-        for (int i = 0; i < (rows * columns); i++) {
+        for (int i = 0; i < (lignes * colonnes); i++) {
             jPanel.add(buttons[i]);
         }
         JMenuBar jMenuBar = new JMenuBar();
@@ -42,78 +42,76 @@ public class Demineur extends JFrame implements ActionListener, MouseListener {
         this.setVisible(true);
     }
 
-
-
     public void initialisation() {
-        for (int x = 0; x < rows; x++) {
-            for (int y = 0; y < columns; y++) {
-                mines[(rows * y) + x] = false;
-                clickdone[(rows * y) + x] = false;
-                clickable[(rows * y) + x] = true;
-                buttons[(rows * y) + x] = new JButton( /*"" + ( x * y )*/);
-                buttons[(rows * y) + x].setPreferredSize(new Dimension(
+        for (int x = 0; x < lignes; x++) {
+            for (int y = 0; y < colonnes; y++) {
+                mines[(lignes * y) + x] = false;
+                clickdone[(lignes * y) + x] = false;
+                clickable[(lignes * y) + x] = true;
+                buttons[(lignes * y) + x] = new JButton();
+                buttons[(lignes * y) + x].setPreferredSize(new Dimension(
                         45, 45));
-                buttons[(rows * y) + x].addActionListener(this);
-                buttons[(rows * y) + x].addMouseListener(this);
+                buttons[(lignes * y) + x].addActionListener(this);
+                buttons[(lignes * y) + x].addMouseListener(this);
             }
         }
-        Fill.fillMines(rows, columns, numMines, mines);
-        Fill.fillNumbers(rows, columns, mines, numbers);
+        Remplir.remplirMines(lignes, colonnes, nombresMines, mines);
+        Remplir.remplirNombre(lignes, colonnes, mines, nombres);
     }
 
     public void initialisation2() {
         this.remove(jPanel);
         jPanel = new JPanel();
-        layout = new GridLayout(rows, columns);
+        layout = new GridLayout(lignes, colonnes);
         jPanel.setLayout(layout);
-        buttons = new JButton[rows * columns];
-        mines = new boolean[rows * columns];
-        clickdone = new boolean[rows * columns];
-        clickable = new boolean[rows * columns];
-        numbers = new int[rows * columns];
+        buttons = new JButton[lignes * colonnes];
+        mines = new boolean[lignes * colonnes];
+        clickdone = new boolean[lignes * colonnes];
+        clickable = new boolean[lignes * colonnes];
+        nombres = new int[lignes * colonnes];
         initialisation();
-        for (int i = 0; i < (rows * columns); i++) {
+        for (int i = 0; i < (lignes * colonnes); i++) {
             jPanel.add(buttons[i]);
         }
         this.add(jPanel);
         this.pack();
-        Fill.fillMines(rows, columns, numMines, mines);
-        Fill.fillNumbers(rows, columns, mines, numbers);
+        Remplir.remplirMines(lignes, colonnes, nombresMines, mines);
+        Remplir.remplirNombre(lignes, colonnes, mines, nombres);
     }
 
     public void setup() {
-        for (int x = 0; x < rows; x++) {
-            for (int y = 0; y < columns; y++) {
-                mines[(rows * y) + x] = false;
-                clickdone[(rows * y) + x] = false;
-                clickable[(rows * y) + x] = true;
-                buttons[(rows * y) + x].setEnabled(true);
-                buttons[(rows * y) + x].setText("");
+        for (int x = 0; x < lignes; x++) {
+            for (int y = 0; y < colonnes; y++) {
+                mines[(lignes * y) + x] = false;
+                clickdone[(lignes * y) + x] = false;
+                clickable[(lignes * y) + x] = true;
+                buttons[(lignes * y) + x].setEnabled(true);
+                buttons[(lignes * y) + x].setText("");
             }
         }
-        Fill.fillMines(rows, columns, numMines, mines);
-        Fill.fillNumbers(rows, columns, mines, numbers);
+        Remplir.remplirMines(lignes, colonnes, nombresMines, mines);
+        Remplir.remplirNombre(lignes, colonnes, mines, nombres);
         lost = false;
-        mineLabel.setText("mines: " + numMines + " marqué(s): 0");
+        mineLabel.setText("mines: " + nombresMines + " marqué(s): 0");
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == difficulty) {
-            rows = Integer.parseInt((String) JOptionPane.showInputDialog(
+            lignes = Integer.parseInt((String) JOptionPane.showInputDialog(
                     this, "Lignes", "Lignes", JOptionPane.PLAIN_MESSAGE, null,
                     null, 10));
-            columns = Integer.parseInt((String) JOptionPane.showInputDialog(
+            colonnes = Integer.parseInt((String) JOptionPane.showInputDialog(
                     this, "Columns", "Columns", JOptionPane.PLAIN_MESSAGE,
                     null, null, 10));
-            numMines = Integer.parseInt((String) JOptionPane.showInputDialog(this, "Mines", "Mines",
+            nombresMines = Integer.parseInt((String) JOptionPane.showInputDialog(this, "Mines", "Mines",
                     JOptionPane.PLAIN_MESSAGE, null, null, 10));
             initialisation2();
         }
         if (!win) {
-            for (int x = 0; x < rows; x++) {
-                for (int y = 0; y < columns; y++) {
-                    if (e.getSource() == buttons[(rows * y) + x]
-                            && !win && clickable[(rows * y) + x]) {
+            for (int x = 0; x < lignes; x++) {
+                for (int y = 0; y < colonnes; y++) {
+                    if (e.getSource() == buttons[(lignes * y) + x]
+                            && !win && clickable[(lignes * y) + x]) {
                         doCheck(x, y);
                         break;
                     }
@@ -138,20 +136,20 @@ public class Demineur extends JFrame implements ActionListener, MouseListener {
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == 3) {
             int n = 0;
-            for (int x = 0; x < rows; x++) {
-                for (int y = 0; y < columns; y++) {
-                    if (e.getSource() == buttons[(rows * y) + x]) {
-                        clickable[(rows * y) + x] = !clickable[(rows * y)
+            for (int x = 0; x < lignes; x++) {
+                for (int y = 0; y < colonnes; y++) {
+                    if (e.getSource() == buttons[(lignes * y) + x]) {
+                        clickable[(lignes * y) + x] = !clickable[(lignes * y)
                                 + x];
                     }
-                    if (!clickdone[(rows * y) + x]) {
-                        if (!clickable[(rows * y) + x]) {
-                            buttons[(rows * y) + x].setText("X");
+                    if (!clickdone[(lignes * y) + x]) {
+                        if (!clickable[(lignes * y) + x]) {
+                            buttons[(lignes * y) + x].setText("X");
                             n++;
                         } else {
-                            buttons[(rows * y) + x].setText("");
+                            buttons[(lignes * y) + x].setText("");
                         }
-                        mineLabel.setText("mines: " + numMines + " marqué(s): "
+                        mineLabel.setText("mines: " + nombresMines + " marqué(s): "
                                 + n);
                     }
                 }
@@ -166,37 +164,37 @@ public class Demineur extends JFrame implements ActionListener, MouseListener {
     }
 
     public void doCheck(int x, int y) {
-        int cur = (rows * y) + x;
+        int cur = (lignes * y) + x;
         boolean l = (x - 1) >= 0;
-        boolean r = (x + 1) < rows;
+        boolean r = (x + 1) < lignes;
         boolean u = (y - 1) >= 0;
-        boolean d = (y + 1) < columns;
-        int left = (rows * (y)) + (x - 1);
-        int right = (rows * (y)) + (x + 1);
-        int up = (rows * (y - 1)) + (x);
-        int upleft = (rows * (y - 1)) + (x - 1);
-        int upright = (rows * (y - 1)) + (x + 1);
-        int down = (rows * (y + 1)) + (x);
-        int downleft = (rows * (y + 1)) + (x - 1);
-        int downright = (rows * (y + 1)) + (x + 1);
+        boolean d = (y + 1) < colonnes;
+        int left = (lignes * (y)) + (x - 1);
+        int right = (lignes * (y)) + (x + 1);
+        int up = (lignes * (y - 1)) + (x);
+        int upleft = (lignes * (y - 1)) + (x - 1);
+        int upright = (lignes * (y - 1)) + (x + 1);
+        int down = (lignes * (y + 1)) + (x);
+        int downleft = (lignes * (y + 1)) + (x - 1);
+        int downright = (lignes * (y + 1)) + (x + 1);
 
         clickdone[cur] = true;
         buttons[cur].setEnabled(false);
-        if (numbers[cur] == 0 && !mines[cur] && !lost && !win) {
+        if (nombres[cur] == 0 && !mines[cur] && !lost && !win) {
             if (u && !win) {
                 if (!clickdone[up] && !mines[up]) {
                     clickdone[up] = true;
                     buttons[up].doClick();
                 }
                 if (l && !win) {
-                    if (!clickdone[upleft] && numbers[upleft] != 0
+                    if (!clickdone[upleft] && nombres[upleft] != 0
                             && !mines[upleft]) {
                         clickdone[upleft] = true;
                         buttons[upleft].doClick();
                     }
                 }
                 if (r && !win) {
-                    if (!clickdone[upright] && numbers[upright] != 0
+                    if (!clickdone[upright] && nombres[upright] != 0
                             && !mines[upright]) {
                         clickdone[upright] = true;
                         buttons[upright].doClick();
@@ -209,7 +207,7 @@ public class Demineur extends JFrame implements ActionListener, MouseListener {
                     buttons[down].doClick();
                 }
                 if (l && !win) {
-                    if (!clickdone[downleft] && numbers[downleft] != 0
+                    if (!clickdone[downleft] && nombres[downleft] != 0
                             && !mines[downleft]) {
                         clickdone[downleft] = true;
                         buttons[downleft].doClick();
@@ -217,7 +215,7 @@ public class Demineur extends JFrame implements ActionListener, MouseListener {
                 }
                 if (r && !win) {
                     if (!clickdone[downright]
-                            && numbers[downright] != 0
+                            && nombres[downright] != 0
                             && !mines[downright]) {
                         clickdone[downright] = true;
                         buttons[downright].doClick();
@@ -237,8 +235,8 @@ public class Demineur extends JFrame implements ActionListener, MouseListener {
                 }
             }
         } else {
-            buttons[cur].setText("" + numbers[cur]);
-            if (!mines[cur] && numbers[cur] == 0) {
+            buttons[cur].setText("" + nombres[cur]);
+            if (!mines[cur] && nombres[cur] == 0) {
                 buttons[cur].setText("");
             }
         }
@@ -249,9 +247,9 @@ public class Demineur extends JFrame implements ActionListener, MouseListener {
     }
 
     public void checkWin() {
-        for (int x = 0; x < rows; x++) {
-            for (int y = 0; y < columns; y++) {
-                int cur = (rows * y) + x;
+        for (int x = 0; x < lignes; x++) {
+            for (int y = 0; y < colonnes; y++) {
+                int cur = (lignes * y) + x;
                 if (!clickdone[cur]) {
                     if (mines[cur]) {
                         continue;
@@ -277,7 +275,7 @@ public class Demineur extends JFrame implements ActionListener, MouseListener {
     public void doLose() {
         if (!lost && !win) {
             lost = true;
-            for (int i = 0; i < rows * columns; i++) {
+            for (int i = 0; i < lignes * colonnes; i++) {
                 if (!clickdone[i]) {
                     buttons[i].doClick(0);
                 }
